@@ -91,3 +91,25 @@ export const validateAll: ValidateFn = (data, schema, messages, config?) => {
     config.customErrorCollector,
   ) as any
 }
+
+/**
+ * Validates the given data set against the defined schema. The validator
+ * continues to the next field after first error on each field. You must 
+ * use [[validate]] to stop validations after first error.
+ *
+ * It is recommended to define the `config` cacheKey to avoid
+ * re-compiling the same schema again and again.
+ */
+export const validateEach: ValidateFn = (data, schema, messages, config?) => {
+  config = Object.assign({}, validatorConfig, config)
+
+  return getExecutor(schema, messages || {}, config as ValidatorConfig).exec(
+    data,
+    config.formatter!,
+    config,
+    false,
+    config.removeAdditional!,
+    config.customErrorCollector,
+    true
+  ) as any
+}
